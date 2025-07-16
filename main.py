@@ -11,17 +11,7 @@ print("Type 'exit' anytime to quit.\n")
 
 sia = SentimentIntensityAnalyzer()
 
-while True:
-    text = input("Enter a prompt: ").strip()
-    
-    if text.lower() == 'exit':
-        print("Goodbye!")
-        sys.exit()
-    
-    if not text:
-        print(Fore.YELLOW + "Please enter some text or type 'exit' to quit.")
-        continue
-
+def clean_text(text):
     tokens = text.lower().split()
     ftext = []
     for word in tokens:
@@ -33,13 +23,43 @@ while True:
             ftext.append(word)
       
     cleaned_text = " ".join(ftext)
+    
+    return cleaned_text
+    
+def analyse_sentiment(cleaned_text):
     scores = sia.polarity_scores(cleaned_text)
+    
+    return scores
 
+    
+    
+def classify_sentiment(scores):
+  
     if scores['compound'] > 0.05:
-        print(Fore.GREEN + "Sentiment: Positive 😊")
+        return "Sentiment: Positive 😊"
     elif scores['compound'] < -0.05:
-        print(Fore.RED + "Sentiment: Negative 😠")
+        return "Sentiment: Negative 😠"
     else:
-        print(Fore.YELLOW + "Sentiment: Neutral 😐")
+        return "Sentiment: Neutral 😐"
+        
+    
+while True:
+    text = input("Enter a prompt: ").strip()
+     
+    if text.lower() == 'exit':
+        print("Goodbye!")
+        sys.exit()
+    
+    if not text:
+        print(Fore.YELLOW + "Please enter some text or type 'exit' to quit.")
+        continue
 
+    cleaned_text = clean_text(text)
+    scores = analyse_sentiment(cleaned_text)
+    
+    print(classify_sentiment(scores))
     print(f"Scores: {scores}\n")
+    
+    
+
+    
